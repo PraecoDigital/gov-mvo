@@ -1,0 +1,7 @@
+{
+  "name": "T&T Vehicle Inspection Pro",
+  "description": "A professional digital inspection form for Trinidad and Tobago vehicles, adhering to the Road Traffic Act (Cap. 48:50) standards with AI-powered safety analysis.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
