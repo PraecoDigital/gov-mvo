@@ -2,9 +2,28 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { InspectionFormData, AISafetyResponse } from "./types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+let aiClient: GoogleGenAI | null = null;
+
+const getAiClient = () => {
+  if (aiClient) return aiClient;
+  const apiKey = process.env.GEMINI_API_KEY || process.env.API_KEY;
+  if (!apiKey) return null;
+  aiClient = new GoogleGenAI({ apiKey });
+  return aiClient;
+};
 
 export const analyzeSafetyStatus = async (formData: InspectionFormData): Promise<AISafetyResponse> => {
+  const ai = getAiClient();
+  if (!ai) {
+    return {
+      summary: "AI safety analysis is unavailable without a Gemini API key.",
+      riskLevel: "MEDIUM",
+      recommendations: [
+        "Set GEMINI_API_KEY in .env.local to enable AI analysis.",
+        "Manually review all failed items against the Road Traffic Act."
+      ]
+    };
+  }
   const parts: any[] = [];
   
   const textPrompt = `
